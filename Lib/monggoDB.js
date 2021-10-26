@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 module.exports = class mongoDB {
-  constructor(process.env.MONGO_URI || url, options) {
+  constructor(url, options) {
     this.url = url
     this.data = this._data = this._schema = this._model = {}
     this.db
