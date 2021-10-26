@@ -1,7 +1,4 @@
-let { MessageType, mentionedJid } = require("@adiwajshing/baileys")
-let fetch = Ft.fetch
-const Canvas = require("discord-canvas")
-
+let { MessageType } = require("@adiwajshing/baileys")
 module.exports = {
 async battery(json) {
 let battery = json[2][0][1].value
@@ -17,54 +14,35 @@ isCharge: battry.live
 
 module.exports = {
 async groupUpdate(member) {
+if (antidelete == false) return
 console.log(member)
-let groupM = await conn.fetchGroupMetadataFromWA(member.jid)
+let button = async(jid, text1, desc1, but = [], options = {}) => {
+const buttonMessages = {
+contentText: text1,
+footerText: desc1,
+buttons: but,
+headerType: 1
+}
+conn.sendMessage(jid, buttonMessages, MessageType.buttonsMessage, options)
+}
+let but = [
+{buttonId: 'NGAPAIN INSPECT?', buttonText: {displayText: 'SAYONARAA'}, type: 1},
+{buttonId: 'NGAPAIN INSPECT?', buttonText: {displayText: 'SAYONARAA'}, type: 1} 
+]
+let groupM = await conn.groupMetadata(member.jid)
 let mem = member.participants[0]
 let action = member.action
-let img = conn.getProfilePicture(mem)
-.catch(e => {
-img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9CGh88WwR8hAX_NKjKC_WrOOzT-cVnGsw34DgCji_TEIPJaIl1Hbkeia5&s=10'
-})
 switch (action) {
-case 'remove': 
-let image = await new Canvas.Goodbye()
-  .setUsername(encodeURI(await conn.getName(mem)))
-  .setDiscriminator(groupM.participants.length)
-  .setMemberCount(groupM.participants.length)
-  .setGuildName(encodeURI(groupM.subject))
-  .setAvatar(img)
-  .setColor("border", "#8015EA")
-  .setColor("username-box", "#8015EA")
-  .setColor("discriminator-box", "#8015EA")
-  .setColor("message-box", "#8015EA")
-  .setColor("title", "#8015EA")
-  .setColor("avatar", "#8015EA")
-  .setBackground("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJOP9RorHQ1OkTW0uYmOkNkBOkvIreWirvug&usqp=CAU")
-  .toAttachment();
-  teks = `@${mem.split("@")[0]} Keluar Dari Group ${groupM.subject}`
- Ft.fs.writeFileSync("./lev.jpg", image.toBuffer())
-conn.sendFile(m.chat, Ft.fs.readFileSync("./lev.jpg"), teks, {contextInfo: {"mentionedJid": conn.parseMention(teks)}})
-break
-case 'add' : 
-let mage = await new Canvas.Welcome()
-  .setUsername(encodeURI(await conn.getName(mem)))
-  .setDiscriminator(groupM.participants.length)
-  .setMemberCount(groupM.participants.length)
-  .setGuildName(encodeURI(groupM.subject))
-  .setAvatar(img)
-  .setColor("border", "#8015EA")
-  .setColor("username-box", "#8015EA")
-  .setColor("discriminator-box", "#8015EA")
-  .setColor("message-box", "#8015EA")
-  .setColor("title", "#8015EA")
-  .setColor("avatar", "#8015EA")
-  .setBackground("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJOP9RorHQ1OkTW0uYmOkNkBOkvIreWirvug&usqp=CAU")
-  .toAttachment();
-  teks = `@${mem.split("@")[0]} Keluar Dari Group ${groupM.subject}`
-conn.sendFile(m.chat, mage.toBuffer(), teks, {contextInfo: {"mentionedJid": conn.parseMention(teks)}})
+case 'remove':
+button(member.jid,`member yang keluar @${mem.split("@")[0]} dari group ${groupM.subject}`,`@Group Remove`, but, {
+contextInfo: {
+mentionedJid: mem
+}
+}
+)
 break
 }
 }
 }
 
-//Gtau lagi 
+
