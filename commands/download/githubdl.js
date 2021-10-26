@@ -6,7 +6,6 @@ utilisation: userbot.prefix + "githubdl <link>",
 
 async execute(m) {
 let { args } = data
-//Madeby Rizky adi
 try {
 if (!args[0]) return m.reply('where username')
 if (!args[1]) return m.reply('where repo')
