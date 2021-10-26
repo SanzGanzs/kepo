@@ -23,5 +23,3 @@ userbot = {
     }
 }
 module.exports = userbot
-
-
