@@ -28,6 +28,7 @@ jobs:
       # - run: npm ci
       # - run: npm run build --if-present
       - run: npm test
+      - run: sudo apt update
       - run: sudo apt install ffmpeg
       - run: sudo apt install imagemagick
       - run: sudo apt install -y libwebp-dev
