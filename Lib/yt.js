@@ -1,10 +1,13 @@
 const fetch = require('node-fetch');
-const { JSDOM } = require('jsdom')
+const { JSDOM } = require('jsdom');
 const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/;
+result = [];
+hasil = [];
 module.exports = class youtube {
   constructor(all={}){
     this.ttl = all.ttl || 3
     this.query = all.q || ""
+    this.url = all.url
   }
 async search(){
 let url = "https://www.youtube.com/results?search_query="+this.query;
@@ -18,7 +21,6 @@ let url = "https://www.youtube.com/results?search_query="+this.query;
       body = JSON.parse(body);
       let c = 0;
       let i = 0;
-      var result = [];
       while(c<this.ttl){
         if(body.itemSectionRenderer.contents[i].videoRenderer){
           var res = 
@@ -52,11 +54,11 @@ async audio() {
         body: Object.keys(formdata).map(key => `${key}=${encodeURIComponent(formdata[key])}`).join('&')
       })
     }
-    if (ytIdRegex.test(this.query)) {
-      let ytId = ytIdRegex.exec(this.query)
-      url = 'https://youtu.be/' + ytId[1]
+    if (ytIdRegex.test(this.url || result[0].link)) {
+      let ytId = ytIdRegex.exec(this.url || result[0].link)
+      this.url = 'https://youtu.be/' + ytId[1]
       post('https://www.y2mate.com/mates/en60/analyze/ajax', {
-        url,
+        url: this.url,
         q_auto: 0,
         ajax: 1
       })
@@ -80,7 +82,6 @@ async audio() {
         .then(res => res.json())
         .then(res => {
           let KB = parseFloat(filesize) * (1000 * /MB$/.test(filesize))
-          hasil = []
           video = /<a.+?href="(.+?)"/.exec(res.result)[1],
           hasil.push({video, thumb, title, filesize})
           resolve(hasil)
@@ -88,5 +89,8 @@ async audio() {
       }).catch(reject)
     } else reject('URL INVALID')
   })
-} 
+}
+async send(from,client,m){
+  client.sendFile(from,hasil[0].video,"kuntull.mp3",null,m).catch(e => client.reply(from,Ft.util.format(e),m))
+}
 }
