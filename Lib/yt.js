@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const { JSDOM } = require('jsdom')
 const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/;
 module.exports = class youtube {
   constructor(all={}){
