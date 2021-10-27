@@ -64,12 +64,12 @@ async audio() {
       })
       .then(res => res.json())
       .then(res => {
-        document = (new JSDOM(res.result)).window.document
-        yaha = document.querySelectorAll('td')
-        filesize = yaha[yaha.length - 23].innerHTML
-        id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
-        thumb = document.querySelector('img').src
-        title = document.querySelector('b').innerHTML
+        let document = (new JSDOM(res.result)).window.document
+        let yaha = document.querySelectorAll('td')
+        let filesize = yaha[yaha.length - 23].innerHTML
+        let id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
+        let thumb = document.querySelector('img').src
+        let title = document.querySelector('b').innerHTML
         post('https://www.y2mate.com/mates/en60/convert', {
           type: 'youtube',
           _id: id[1],
@@ -82,15 +82,12 @@ async audio() {
         .then(res => res.json())
         .then(res => {
           let KB = parseFloat(filesize) * (1000 * /MB$/.test(filesize))
-          video = /<a.+?href="(.+?)"/.exec(res.result)[1],
+          let video = /<a.+?href="(.+?)"/.exec(res.result)[1]
           hasil.push({video, thumb, title, filesize})
           resolve(hasil)
         }).catch(reject)
       }).catch(reject)
     } else reject('URL INVALID')
   })
-}
-async send(from,client,m){
-  client.sendFile(from,hasil[0].video,"kuntull.mp3",null,m).catch(e => client.reply(from,Ft.util.format(e),m))
 }
 }
