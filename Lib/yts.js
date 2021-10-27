@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-class yts {
+module.exports = class yts {
 async search(query, nb){
 let url = "https://www.youtube.com/results?search_query="+query;
   return fetch(url)
