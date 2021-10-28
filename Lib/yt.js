@@ -44,7 +44,11 @@ let url = "https://www.youtube.com/results?search_query="+this.query;
 async download() {
   return new Promise((resolve, reject) => {
     var url = this.url || result[0].link
-    if (!url) throw new Error("no link")
+    if (!url) {
+      search(this.query).tnen(asu => {
+        url = asu[0].link
+      }).catch(reject)
+    }
     scrap.yta(url)
     .then(res => {
       scrap.ytv(url).then(resu => {
@@ -60,5 +64,12 @@ async download() {
       }).catch(reject)
     }).catch(reject)
   })
+}
+async clear(){
+  result = []
+  hasil = []
+  this.ttl = undefined
+  this.query = undefined
+  this.url = undefined
 }
 }
