@@ -57,8 +57,8 @@ async download() {
           video: resu[0].video,
           video_size: resu[0].filesize
         })
-      })
-    })
+      }).catch(reject)
+    }).catch(reject)
   })
 }
 }
