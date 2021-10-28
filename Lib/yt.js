@@ -43,7 +43,7 @@ let url = "https://www.youtube.com/results?search_query="+this.query;
 };
 async download() {
   return new Promise((resolve, reject) => {
-    var url = this.url || result[0].link
+    var url = this.url 
     if (!url) {
       search(this.query).tnen(asu => {
         url = asu[0].link
