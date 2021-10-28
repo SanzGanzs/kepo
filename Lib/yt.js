@@ -41,12 +41,24 @@ let url = "https://www.youtube.com/results?search_query="+this.query;
       return result;
     });
 };
-async audio() {
+async download() {
   return new Promise((resolve, reject) => {
-    if (typeof result === 'object') throw new Error("search dulu coeg atau pake url")
-    scrap.yta(this.url || result)
-    .then(res => resolve(res))
-    .catch(reject)
+    var url = this.url || result[0].link
+    if (!url) throw new Error("no link")
+    scrap.yta(url)
+    .then(res => {
+      scrap.ytv(url).then(resu => {
+        resolve({
+          title: result[0].link,
+          img: result[0].thumbnail,
+          id: result[0].id,
+          audio: res[0].audio,
+          audio_size: res[0].filesize,
+          video: resu[0].video,
+          video_size: resu[0].filesize
+        })
+      })
+    })
   })
 }
 }
