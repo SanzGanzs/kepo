@@ -43,51 +43,10 @@ let url = "https://www.youtube.com/results?search_query="+this.query;
 };
 async audio() {
   return new Promise((resolve, reject) => {
-    function post(url, formdata) {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          accept: "*/*",
-          'accept-language': "en-US,en;q=0.9",
-          'content-type': "application/x-www-form-urlencoded; charset=UTF-8"
-        },
-        body: Object.keys(formdata).map(key => `${key}=${encodeURIComponent(formdata[key])}`).join('&')
-      })
-    }
-    if (ytIdRegex.test(this.url || result[0].link)) {
-      let ytId = ytIdRegex.exec(this.url || result[0].link)
-      this.url = 'https://youtu.be/' + ytId[1]
-      post('https://www.y2mate.com/mates/en60/analyze/ajax', {
-        url: this.url,
-        q_auto: 0,
-        ajax: 1
-      })
-      .then(res => res.json())
-      .then(res => {
-        let document = (new JSDOM(res.result)).window.document
-        let yaha = document.querySelectorAll('td')
-        let filesize = yaha[yaha.length - 23].innerHTML
-        let id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
-        let thumb = document.querySelector('img').src
-        let title = document.querySelector('b').innerHTML
-        post('https://www.y2mate.com/mates/en60/convert', {
-          type: 'youtube',
-          _id: id[1],
-          v_id: ytId[1],
-          ajax: '1',
-          token: '',
-          ftype: 'mp4',
-          fquality: 360
-        })
-        .then(res => res.json())
-        .then(res => {
-          let KB = parseFloat(filesize) * (1000 * /MB$/.test(filesize))
-          let video = /<a.+?href="(.+?)"/.exec(res.result)[1]
-          hasil.push({video, thumb, title, filesize})
-          resolve(hasil)
-        }).catch(reject)
-      }).catch(reject)
-    } else reject('URL INVALID')
+    if (typeof result === 'object') throw new Error("search dulu coeg atau pake url")
+    scrap.yta(this.url || result)
+    .then(res => resolve(res))
+    .catch(reject)
   })
 }
 }
